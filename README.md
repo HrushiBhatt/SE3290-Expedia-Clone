@@ -1,89 +1,115 @@
-<h1>Chalo Ghume</h1>
+# SE3290 Expedia Clone
 
-<p>This project is a clone of the Expedia website, created by Team of 5 starting with Kumkum (Team Lead), Ashish, Amit, Sagar Balsaraf, and Sarim . The purpose of this project is to showcase our skills and knowledge in HTML, CSS, JavaScript, React, Redux, and Json-Server.<p>
+## Project overview
 
+Expedia Clone is an educational travel website inspired by Expedia. This React application combines hotel and flight browsing, destination discovery, account screens, a checkout interface, and administration pages. Redux manages application state, JSON Server supplies sample data, and Firebase supports phone authentication.
 
-<h2>Tech Stack</h2>
+The project contains partially integrated booking flows. Checkout is a demonstration interface; it does not process payments or confirm travel reservations.
 
-- HTML
-- CSS
-- JavaScript
-- React
-- Redux
-- Json-Server
-- firebase
+## Features
 
+- Travel homepage with destination and date inputs and promotional banners.
+- Hotel cards, price controls, sorting, and pagination components.
+- Flight search inputs, listing components, and sidebar filters.
+- Things to Do destination and activity discovery pages.
+- Login and registration screens with Firebase phone OTP integration and local user records.
+- Booking review interface with traveler and payment input fields.
+- Admin dashboard with hotel and flight listing, creation, and deletion controls.
 
-<h2>Dependency</h2>
+Some features require the service configuration described below or further integration.
 
-- axios
-- redux
-- react-redux
-- redux thunk
-- chakraUI
-- firebase
-- font-awesome
-- json-server
-- react-router-dom
-- better-react-carousel
+## Tech stack
 
-<h2>Features</h2>
+React 18, Create React App 5, React Router 6, Redux, Redux Thunk, Chakra UI, Emotion, styled-components, Axios, Firebase 9, and JSON Server.
 
-- Landing Page
-- Login and signup via firebase (OTP).
-- View details of flights, hotels.
-- Search for flights, hotels, and holiday packages
-- Sorting & Filtering and Seraching
-- Book flights, hotels.
-- Cart Section
-- Admin Panel
+## Installation
 
-<h2>Installation</h2>
+### 1. Prerequisites
 
-To run this project locally, follow the steps below:
+Install Git and Node.js with npm. The repository does not pin a Node.js version. Internet access is required for dependency installation and external services.
 
-. Clone the repository by running the following command:
-git clone https://github.com/kumkumdutta/interesting-stretch-8935.git
+### 2. Clone and install
 
-. Navigate to the project directory:
-cd hesitant-river-6235
+```sh
+git clone https://github.com/HrushiBhatt/SE3290-Expedia-Clone.git
+cd SE3290-Expedia-Clone
+npm ci
+```
 
-. Install the dependencies:
-npm install
+For an existing checkout, run `npm ci` from the project root.
 
-. Start the server:
-npm start
+### 3. Start the sample API
 
-. Start JSON- Server:
+The `server` script references JSON Server, which is missing from the declared dependencies. Run this pinned version from the project root:
+
+```sh
+npx --yes json-server@0.17.4 --watch db.json --port 8080
+```
+
+Keep the terminal open. The API runs at `http://localhost:8080` and exposes `/users`, `/hotel`, `/flight`, `/hotelcart`, `/flightcart`, `/giftcards`, and `/Things_todo`. API writes modify `db.json`.
+
+Alternatively, install JSON Server and use the existing script:
+
+```sh
+npm install --save-dev json-server@0.17.4
 npm run server
+```
 
-. Open the website in your browser:
-http://localhost:3000/
+This alternative updates the package manifest and lockfile.
 
+### 4. Configure local API requests
 
-<h2>Deployment</h2>
+API URLs are written directly in source files. Starting the local API does not automatically redirect requests that use other servers.
 
-This project has been deployed using Vercel at the following URL:
+| Source file | Current target | Local setup |
+| --- | --- | --- |
+| `src/Redux/Authantication/auth.action.js` | `localhost:8080/users` | Already local. |
+| `src/Redux/AdminFlights/action.js` | `localhost:8080/flight` | Already local. |
+| `src/Redux/AdminHotel/action.js` | `localhost:8080/hotel` | Already local. |
+| `src/Redux/StayReducer/action.js` | `happy-sunglasses-eel.cyclic.app/hotel` | Replace the remote origin with `http://localhost:8080`. |
+| `src/Pages/Flights/FlightList.jsx` | `makemytrip-api-data.onrender.com/flight` | Replace the remote origin with `http://localhost:8080`. |
+| `src/Pages/Flights/FlightCard.jsx` | `localhost:8000/flightcart` | Change port `8000` to `8080`. |
 
-https://interesting-stretch-8935-liart.vercel.app/
+These adjustments connect the listed requests to local sample data; they do not resolve all unfinished application behavior. Availability of the original remote APIs has not been verified.
 
+### 5. Configure authentication when needed
 
-This is Login and Signup pages:-
-![login](https://user-images.githubusercontent.com/112754519/231046318-135d34cb-0ae7-46c3-851c-6889441c62de.PNG)
+Firebase initialization is in `src/01_firebase/config_firebase.js`. To use your own Firebase project, replace the web app configuration and configure Phone authentication and the permitted development domain in Firebase. OTP flows need a working Firebase setup; JSON Server does not provide SMS verification.
 
+### 6. Start the frontend
 
+In a second terminal at the project root:
 
-This is the Stays Page:-
-![stays](https://user-images.githubusercontent.com/112754519/231046349-d9885d9f-b42d-4d9f-bfc2-0cac0f9a10df.PNG)
+```sh
+npm start
+```
 
+Open [http://localhost:3000](http://localhost:3000). Keep both processes running during development.
 
+## Available commands
 
-This is the Flight Page:-
-![Flight](https://user-images.githubusercontent.com/112754519/231046392-fea5d486-9b26-462c-af9a-5727853e6669.PNG)
+| Command | Purpose |
+| --- | --- |
+| `npm start` | Start the React development server. |
+| `npm run server` | Start the API on port 8080 after installing JSON Server. |
+| `npm run build` | Create a production frontend bundle in `build/`. |
+| `npm test` | Run the test runner in watch mode. |
 
+The existing `src/App.test.js` still checks for the default “learn react” text and needs updating for this application. The frontend build does not bundle the API or Firebase services.
 
+## Project structure
 
-This is the Admin Page:-
-![Admin](https://user-images.githubusercontent.com/112754519/231046415-c8c2f14c-f586-4da0-884a-992bc18b0e12.PNG)
+```text
+public/                 Static assets and HTML entry point
+src/
+  01_firebase/          Firebase initialization
+  Components/           Shared navigation, footer, and homepage components
+  Pages/                Travel, account, checkout, and admin screens
+  Redux/                Store, actions, and reducers
+  App.js                Root application component
+  index.js              React entry point
+db.json                 Sample JSON Server data
+package.json            Dependencies and npm scripts
+```
 
-
+Main routes include `/`, `/stay`, `/flight`, `/ThingsToDo`, `/login`, `/register`, `/checkout`, and `/admin`.
