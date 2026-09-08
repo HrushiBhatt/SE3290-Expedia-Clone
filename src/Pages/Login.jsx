@@ -49,10 +49,8 @@ export const Login = () => {
       "recaptcha-container",
       {
         size: "invisible",
-        callback: (response) => {
-          handleVerifyNumber();
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          // ...
+        callback: () => {
+          console.log("reCAPTCHA solved");
         },
       },
       auth
@@ -62,7 +60,7 @@ export const Login = () => {
   function handleVerifyNumber() {
     document.querySelector("#nextText").innerText = "Please wait...";
     onCapture();
-    const phoneNumber = `+91${number}`;
+    const phoneNumber = `+1${number}`;
     const appVerifier = window.recaptchaVerifier;
     if (number.length === 10) {
       if (exist) {
@@ -79,11 +77,16 @@ export const Login = () => {
             document.querySelector("#nextText").style.display = "none";
             // ...
           })
+
           .catch((error) => {
-            // Error; SMS not sent
-            // document.querySelector("#nextText").innerText = "Server Error"
-            // ...
+            console.error("Firebase phone auth error:", error);
+
+            document.querySelector("#loginMesageError").innerHTML =
+              error.message;
+
+            document.querySelector("#nextText").innerText = "SignIn";
           });
+          
       } else {
         document.querySelector("#loginMesageSuccess").innerHTML = ``;
         document.querySelector("#loginMesageError").innerHTML =
