@@ -48,7 +48,7 @@ export const addHotel = (payload) => (dispatch) => {
   dispatch(hotelRequest());
 
   axios
-    .post("https://happy-sunglasses-eel.cyclic.app/hotel", payload) 
+    .post("http://localhost:8080/hotel", payload)
     .then(() => {
       dispatch(postHotelSuccess());
     })
@@ -57,15 +57,14 @@ export const addHotel = (payload) => (dispatch) => {
     });
 };
 
-//https://happy-sunglasses-eel.cyclic.app/hotel?_sort=asc&_order=price&page=1&_limit=20
-export const fetchingHotels = (sort, order, page) => async (dispatch) => {
-  console.log(order, sort,page);
+export const fetchingHotels = (sort, order) => async (dispatch) => {
   dispatch({ type: HOTEL_REQUEST });
   try {
+    // json-server v1 sorts with a single `_sort` param; a leading "-" means descending.
+    const sortParam = sort ? (order === "desc" ? `-${sort}` : sort) : "";
     const res = await axios.get(
-      `https://happy-sunglasses-eel.cyclic.app/hotel?_sort=${sort}&_order=${order}&_page=${page}&_limit=20`
+      `http://localhost:8080/hotel${sortParam ? `?_sort=${sortParam}` : ""}`
     );
-    console.log(res.data);
     dispatch({ type: GET_HOTEL_SUCCESS, payload: res.data });
   } catch (err) {
     dispatch({ type: HOTEL_FAILURE });
@@ -82,7 +81,7 @@ export const fetchingHotels = (sort, order, page) => async (dispatch) => {
 export const DeleteHotel = (deleteId) => async (dispatch) => {
   try {
     const res = await fetch(
-      `https://happy-sunglasses-eel.cyclic.app/hotel/${deleteId}`, 
+      `http://localhost:8080/hotel/${deleteId}`,
       {
         method: "DELETE",
         headers: {

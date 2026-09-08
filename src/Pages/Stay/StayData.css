@@ -5,14 +5,15 @@
 }
 .stay-card {
   display: flex;
-  width: 50%;
-  margin: auto;
+  width: 100%;
   height: auto;
-  margin-bottom: 30px;
-  border: 1px solid #ccc;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  margin-bottom: 24px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
-img {
+.stay-card img {
   width: 40%;
   height: auto;
   object-fit: cover;
@@ -76,10 +77,6 @@ img {
   color: #343B53;
 }
 .sidebar-container {
-  position: absolute;
-  left: 0;
-  width: 300px;
-  margin-top: 20px;
-  display: "flex"; 
-  flex-Direction: "row";
+  width: 260px;
+  flex-shrink: 0;
 }

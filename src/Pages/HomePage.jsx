@@ -1,20 +1,14 @@
 import React from "react";
+import Hero from "../Components/HomePageComponents/Hero";
 import MainInputBox from "../Components/HomePageComponents/MainInputBox";
-import Banner1 from "../Components/HomePageComponents/Banner1";
-import ImageQRCodeBanner from "../Components/HomePageComponents/ImageQRCodeBanner";
 import HelpBoxes from "../Components/HomePageComponents/HelpBoxes";
-import QatarVisitBanner from "../Components/HomePageComponents/QatarVisitBanner";
-import ManSeeBanner from "../Components/HomePageComponents/ManSeeBanner";
 
 const HomePage = () => {
   return (
     <div>
+      <Hero />
       <MainInputBox />
-      <Banner1 />
-      <ImageQRCodeBanner />
       <HelpBoxes />
-      <QatarVisitBanner />
-      <ManSeeBanner />
     </div>
   );
 };
