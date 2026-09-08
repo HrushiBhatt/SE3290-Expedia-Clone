@@ -5,13 +5,13 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBlKHCdVfQvMRKQf2B5UqaLfDkwm6T1apo",
-  authDomain: "challo-ghume-fa22c.firebaseapp.com",
-  projectId: "challo-ghume-fa22c",
-  storageBucket: "challo-ghume-fa22c.appspot.com",
-  messagingSenderId: "411994731743",
-  appId: "1:411994731743:web:a02cec85eb6aa66ddbe56a",
-  measurementId: "G-5KYMV9KZ2D"
+  apiKey: "AIzaSyBwuE10F-wcvZllqmdL7EKk2VWyZQNvSzg",
+  authDomain: "se3290-expedia-clone.firebaseapp.com",
+  projectId: "se3290-expedia-clone",
+  storageBucket: "se3290-expedia-clone.firebasestorage.app",
+  messagingSenderId: "593442878619",
+  appId: "1:593442878619:web:722dd0c4442c08b35c823e",
+  measurementId: "G-ZWVGD87DJY"
 };
 
 // Initialize Firebase
