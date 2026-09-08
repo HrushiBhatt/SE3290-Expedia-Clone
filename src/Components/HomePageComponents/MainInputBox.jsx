@@ -1,47 +1,53 @@
-import { Tab, TabIndicator,Box, TabList, TabPanel, TabPanels, Tabs, Center } from '@chakra-ui/react'
+import { Tab, Box, TabList, TabPanel, TabPanels, Tabs, Container, useColorModeValue } from '@chakra-ui/react'
 import Stay from '../../Pages/Stay/Stay';
 import React from 'react'
 import { InputBox } from '../../Pages/ThingsTodo/InputBox'
 import Flights from '../../Pages/Flights/Flight'
 
+const TABS = ['Stays', 'Flight', 'Cars', 'Things to do', 'Packages'];
+
 const MainInputBox = () => {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const tabBorder = useColorModeValue('gray.100', 'gray.700');
+
   return (
-    <Box width={'85%'}   m={'auto'} mt={10} border='1px solid #BDBDBD' borderRadius='7px' >
-            <Tabs position="relative" variant="unstyled"  >
-                <Center>
-                    <TabList borderBottom='1px solid #BDBDBD' width={'80%'} justifyContent={'space-evenly'} pt={5} pb={3} >
-                        <Tab _selected={{ color: 'blue.500'}} fontWeight='semibold' >Stays</Tab>
-                        <Tab _selected={{ color: 'blue.500'}} fontWeight='semibold'>Flight</Tab>
-                        <Tab _selected={{ color: 'blue.500'}} fontWeight='semibold'>Cars</Tab>
-                        <Tab _selected={{ color: 'blue.500'}} fontWeight='semibold'>Things to do</Tab>
-                        <Tab _selected={{ color: 'blue.500'}} fontWeight='semibold'>Packages</Tab>
-                    </TabList>
-                </Center>
-                <TabIndicator
-                mt="-1.5px"
-                height="2px"
-                bg="blue.500"
-                borderRadius="1px"
-                />
-                <TabPanels>
-                    <TabPanel>
-                    <Stay/>
-                    </TabPanel>
-                    <TabPanel>
-                        <Flights/>
-                    </TabPanel>
-                    <TabPanel>
-                        <p>Cars</p>
-                    </TabPanel>
-                    <TabPanel>
-                        <InputBox/>
-                    </TabPanel>
-                    <TabPanel>
-                        <p>Packages</p>
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
-    </Box>
+    <Container maxW="6xl" px={{ base: 4, md: 8 }} mt={{ base: -8, md: -10 }} position="relative" zIndex={1}>
+      <Box bg={cardBg} boxShadow="lg" borderRadius="xl">
+        <Tabs variant="line" colorScheme="brand" isLazy>
+          <TabList
+            borderColor={tabBorder}
+            overflowX="auto"
+            overflowY="hidden"
+            css={{ scrollbarWidth: 'none', '&::-webkit-scrollbar': { display: 'none' } }}
+            justifyContent={{ base: 'flex-start', md: 'center' }}
+            px={{ base: 3, md: 6 }}
+          >
+            {TABS.map((label) => (
+              <Tab key={label} whiteSpace="nowrap" fontWeight="semibold" py={4} px={4}>
+                {label}
+              </Tab>
+            ))}
+          </TabList>
+          <TabPanels>
+            <TabPanel p={{ base: 4, md: 6 }}>
+              <Stay />
+            </TabPanel>
+            <TabPanel p={{ base: 4, md: 6 }}>
+              <Flights />
+            </TabPanel>
+            <TabPanel p={{ base: 4, md: 6 }}>
+              <p>Cars</p>
+            </TabPanel>
+            <TabPanel p={{ base: 4, md: 6 }}>
+              <InputBox />
+            </TabPanel>
+            <TabPanel p={{ base: 4, md: 6 }}>
+              <p>Packages</p>
+            </TabPanel>
+          </TabPanels>
+        </Tabs>
+      </Box>
+    </Container>
   )
 }
 

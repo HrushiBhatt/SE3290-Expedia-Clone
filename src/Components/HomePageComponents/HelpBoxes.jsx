@@ -1,44 +1,49 @@
 import React from 'react'
-import { Box, Heading, HStack, SimpleGrid,Text ,Icon} from '@chakra-ui/react'
-import {BsPencilFill} from 'react-icons/bs'
-import {RiMessage2Fill} from 'react-icons/ri'
-import {HiCurrencyDollar} from 'react-icons/hi'
+import { Box, Heading, HStack, SimpleGrid, Text, Icon, Container, useColorModeValue } from '@chakra-ui/react'
+import { BsPencilFill } from 'react-icons/bs'
+import { RiMessage2Fill } from 'react-icons/ri'
+import { HiCurrencyDollar } from 'react-icons/hi'
+
+const ITEMS = [
+  {
+    title: 'Change or cancel a trip',
+    description: 'Make updates to your itinerary or cancel a booking',
+    icon: BsPencilFill,
+  },
+  {
+    title: 'Use a credit or coupon',
+    description: 'Apply a coupon code or credit to a new trip',
+    icon: HiCurrencyDollar,
+  },
+  {
+    title: 'Track your refund',
+    description: 'Check on the progress of a refund in process',
+    icon: RiMessage2Fill,
+  },
+]
+
 const HelpBoxes = () => {
+  const cardBg = useColorModeValue('white', 'gray.800');
+  const cardBorder = useColorModeValue('gray.100', 'gray.700');
+  const descColor = useColorModeValue('gray.500', 'gray.400');
+
   return (
-    <Box width={'85%'} m={'auto'} mt={10} >
-            <Heading fontSize={'3xl'} fontWeight='semibold' textAlign={'left'} >
-                Here to help keep you on the move
-            </Heading>
-            {/* <Flex>
-                <Box border='1px solid gray' rounded='7px' mt={4} >
-                    <Heading textAlign={'left'} p={3} pb={1} fontSize='20px' >Change or cancel a trip</Heading>
-                    <Heading textAlign={'left'} p={3} pt={1} fontSize='12px' >Make update to your itenerary or cancel a booking</Heading>
-                </Box>
-            </Flex> */}
-            <SimpleGrid gridTemplateColumns={{base:'repeat(1,1fr)',sm:'repeat(3,1fr)'}} columnGap={4} >
-                <Box border='1px solid #E0E0E0' rounded='7px' mt={4} >
-                    <HStack justifyContent={'space-between'} pr={2} >
-                    <Heading textAlign={'left'} p={3} pb={1} fontSize='20px' >Change or cancel a trip</Heading>
-                    <Icon as={BsPencilFill}  />
-                    </HStack>
-                    <Text textAlign={'left'} p={3} pt={1} color='#616161' fontSize='12px' >Make update to your itenerary or cancel a booking</Text>
-                </Box>
-                <Box border='1px solid #E0E0E0' rounded='7px' mt={4} >
-                    <HStack justifyContent={'space-between'} pr={2} >
-                    <Heading textAlign={'left'} p={3} pb={1} fontSize='20px' >Use a Credit or Coupan</Heading>
-                    <Icon as={HiCurrencyDollar}  />
-                    </HStack>
-                    <Text textAlign={'left'} p={3} pt={1} color='#616161' fontSize='12px' >Apply a coupan code or credit a new trip</Text>
-                </Box>
-                <Box border='1px solid #E0E0E0' rounded='7px' mt={4} >
-                    <HStack justifyContent={'space-between'} pr={2} >
-                    <Heading textAlign={'left'} p={3} pb={1} fontSize='20px' >Track your Refund</Heading>
-                    <Icon as={RiMessage2Fill}  />
-                    </HStack>
-                    <Text textAlign={'left'} p={3} pt={1} color='#616161' fontSize='12px' >Check a process of refund currently progress</Text>
-                </Box>
-            </SimpleGrid>
-        </Box>
+    <Container maxW="6xl" px={{ base: 4, md: 8 }} mt={16} mb={4}>
+      <Heading fontSize="2xl" fontWeight={700} textAlign="left">
+        Here to help keep you on the move
+      </Heading>
+      <SimpleGrid columns={{ base: 1, sm: 3 }} spacing={4} mt={5}>
+        {ITEMS.map((item) => (
+          <Box key={item.title} border="1px solid" borderColor={cardBorder} bg={cardBg} rounded="lg" p={4}>
+            <HStack justify="space-between" align="start">
+              <Heading fontSize="md" fontWeight={600}>{item.title}</Heading>
+              <Icon as={item.icon} color="brand.500" mt={1} />
+            </HStack>
+            <Text mt={2} color={descColor} fontSize="sm">{item.description}</Text>
+          </Box>
+        ))}
+      </SimpleGrid>
+    </Container>
   )
 }
 
