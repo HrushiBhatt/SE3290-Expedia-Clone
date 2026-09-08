@@ -40,18 +40,18 @@ For an existing checkout, run `npm ci` from the project root.
 
 ### 3. Start the sample API
 
-The `server` script references JSON Server, which is missing from the declared dependencies. Run this pinned version from the project root:
+The project declares a JSON Server 1.0 beta dependency, while existing requests use the older query syntax. For compatibility with those requests, run this pinned version from the project root:
 
 ```sh
-npx --yes json-server@0.17.4 --watch db.json --port 8080
+npx --yes json-server@0.17.4 --watch data/db.json --port 8080
 ```
 
-Keep the terminal open. The API runs at `http://localhost:8080` and exposes `/users`, `/hotel`, `/flight`, `/hotelcart`, `/flightcart`, `/giftcards`, and `/Things_todo`. API writes modify `db.json`.
+Keep the terminal open. The API runs at `http://localhost:8080` and exposes `/users`, `/hotel`, `/flight`, `/hotelcart`, `/flightcart`, `/giftcards`, and `/Things_todo`. API writes modify `data/db.json`.
 
-Alternatively, install JSON Server and use the existing script:
+Alternatively, install the compatible version locally and use the existing script:
 
 ```sh
-npm install --save-dev json-server@0.17.4
+npm install json-server@0.17.4
 npm run server
 ```
 
@@ -63,18 +63,18 @@ API URLs are written directly in source files. Starting the local API does not a
 
 | Source file | Current target | Local setup |
 | --- | --- | --- |
-| `src/Redux/Authantication/auth.action.js` | `localhost:8080/users` | Already local. |
-| `src/Redux/AdminFlights/action.js` | `localhost:8080/flight` | Already local. |
-| `src/Redux/AdminHotel/action.js` | `localhost:8080/hotel` | Already local. |
-| `src/Redux/StayReducer/action.js` | `happy-sunglasses-eel.cyclic.app/hotel` | Replace the remote origin with `http://localhost:8080`. |
-| `src/Pages/Flights/FlightList.jsx` | `makemytrip-api-data.onrender.com/flight` | Replace the remote origin with `http://localhost:8080`. |
-| `src/Pages/Flights/FlightCard.jsx` | `localhost:8000/flightcart` | Change port `8000` to `8080`. |
+| `src/features/auth/state/auth.action.js` | `localhost:8080/users` | Already local. |
+| `src/features/admin/state/flights/action.js` | `localhost:8080/flight` | Already local. |
+| `src/features/admin/state/hotels/action.js` | `localhost:8080/hotel` | Already local. |
+| `src/features/stays/state/action.js` | `happy-sunglasses-eel.cyclic.app/hotel` | Replace the remote origin with `http://localhost:8080`. |
+| `src/features/flights/FlightList.jsx` | `makemytrip-api-data.onrender.com/flight` | Replace the remote origin with `http://localhost:8080`. |
+| `src/features/flights/FlightCard.jsx` | `localhost:8000/flightcart` | Change port `8000` to `8080`. |
 
 These adjustments connect the listed requests to local sample data; they do not resolve all unfinished application behavior. Availability of the original remote APIs has not been verified.
 
 ### 5. Configure authentication when needed
 
-Firebase initialization is in `src/01_firebase/config_firebase.js`. To use your own Firebase project, replace the web app configuration and configure Phone authentication and the permitted development domain in Firebase. OTP flows need a working Firebase setup; JSON Server does not provide SMS verification.
+Firebase initialization is in `src/config/firebase.js`. To use your own Firebase project, replace the web app configuration and configure Phone authentication and the permitted development domain in Firebase. OTP flows need a working Firebase setup; JSON Server does not provide SMS verification.
 
 ### 6. Start the frontend
 
@@ -91,25 +91,55 @@ Open [http://localhost:3000](http://localhost:3000). Keep both processes running
 | Command | Purpose |
 | --- | --- |
 | `npm start` | Start the React development server. |
-| `npm run server` | Start the API on port 8080 after installing JSON Server. |
+| `npm run server` | Start the API on port 8080 using `data/db.json` and the installed JSON Server version. |
 | `npm run build` | Create a production frontend bundle in `build/`. |
 | `npm test` | Run the test runner in watch mode. |
 
-The existing `src/App.test.js` still checks for the default “learn react” text and needs updating for this application. The frontend build does not bundle the API or Firebase services.
+The existing `src/app/App.test.js` still checks for the default “learn react” text and needs updating for this application. The frontend build does not bundle the API or Firebase services.
 
 ## Project structure
 
 ```text
-public/                 Static assets and HTML entry point
+data/
+  db.json                   Sample JSON Server database
+public/                     Public assets and HTML entry point
 src/
-  01_firebase/          Firebase initialization
-  Components/           Shared navigation, footer, and homepage components
-  Pages/                Travel, account, checkout, and admin screens
-  Redux/                Store, actions, and reducers
-  App.js                Root application component
-  index.js              React entry point
-db.json                 Sample JSON Server data
-package.json            Dependencies and npm scripts
+  app/                      App shell, routes, Redux store, theme, and app tests
+  assets/                   Assets imported by application code
+  components/               Shared UI components
+    forms/                  Shared form inputs
+    layout/                 Navbar and footer
+  config/                   Firebase initialization and API configuration placeholder
+  features/
+    activities/             Things to Do screens and components
+    admin/                  Administration screens and their styles
+      state/
+        flights/            Admin flight actions, action types, and reducer
+        hotels/             Admin hotel actions, action types, and reducer
+    auth/                   Login, registration, and authentication styles
+      state/                Authentication actions, action types, and reducer
+    checkout/               Booking review screen
+    flights/                Flight search, results, cards, and styles
+    home/                   Homepage
+      components/           Hero, search tabs, and help components
+    stays/                  Hotel search, results, filters, styles, and city data
+      state/                Stay actions, action types, and reducer
+  styles/                   Global application styles
+  utils/                    Web vitals reporting
+  index.js                  Create React App entry point and providers
+  setupTests.js             Shared Jest setup
+package.json                Dependencies and npm scripts
+README.md                   Project documentation
 ```
+
+### Organization conventions
+
+- Keep code and styles specific to a travel feature together in `src/features/<feature>/`. Feature Redux logic belongs in its `state/` folder.
+- Put reusable UI in `src/components/`; shared page layout belongs in `components/layout/`.
+- Use `src/app/` for application composition: routes, the combined Redux store, the theme, and the root component.
+- Use `src/config/` for service initialization. The existing `baseurl.js` is an empty placeholder; request URLs still live in feature action and component files listed above.
+- Colocate component styles and tests with their code. Reserve `src/styles/` for global CSS and `src/assets/` for imported assets.
+- Use lowercase directory names and PascalCase React component filenames. Keep `src/index.js`, `src/setupTests.js`, and `public/index.html` in their Create React App locations.
+- Run npm commands from the repository root; sample API data lives in `data/db.json`.
 
 Main routes include `/`, `/stay`, `/flight`, `/ThingsToDo`, `/login`, `/register`, `/checkout`, and `/admin`.
